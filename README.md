@@ -21,15 +21,21 @@ The key components are illustrated in the diagram below:
 ## Deployment
 
 > [!IMPORTANT]  
-> Before beginning the deployment, request access to the necessary Amazon Bedrock foundation models [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+> Before beginning the deployment, request access to the following Amazon Bedrock foundation models [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+> - Amazon Titan Embeddings G1 - Text
+> - Anthropic Claude 3.5 Sonnet
+> - Anthropic Claude 3.5 Sonnet v2
+> - Anthropic Claude 3 Sonnet
 
 > [!NOTE]  
 > Full deployment takes approximately 20-30 minutes.
 
-1. Deploy the conversational interface and IAM role for Amazon Bedrock Agent by selecting your preferred region:
-
 > [!WARNING]  
 > Launching this stack will create 2 VPCs (Infrastructure and UI).
+
+### 1. Deploy the conversational interface and IAM role for Amazon Bedrock Agent by selecting your preferred region:
+
+
 
 | Name | us-east-1 | us-west-2 |
 | -- | ---------- | ----------------- |
@@ -41,7 +47,15 @@ This template will set up:
 - React application on ECS
 - Amazon Bedrock Agents service role
 
-To access the conversational interface:
+
+
+### 2. Deploy one or more of the multi-agent supervisors:
+
+| Name | us-east-1 | us-west-2 |
+| -- | ---------- | ----------------- |
+| Competitive Intelligence | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
+
+### 3. Access the conversational interface:
    
    1. Navigate to AWS CloudFormation via AWS Console search
    2. Click the parent stack name that was chosen to deploy the `Infra_cfn.yaml`
@@ -49,13 +63,6 @@ To access the conversational interface:
    4. You should be able to see a landing page with all (or a subset) deployed agents as shown in the [video](https://d2dnsxs0d2upyb.cloudfront.net/agents-demo/agents_toolkit_overview.mp4) below:
 
    [![react-app-landing-page](docs/src/assets/agents_list_react_app.png)](https://d2dnsxs0d2upyb.cloudfront.net/agents-demo/agents_toolkit_overview.mp4)
-
-2. Deploy one or more of the multi-agent supervisors:
-
-| Name | us-east-1 | us-west-2 |
-| -- | ---------- | ----------------- |
-| Competitive Intelligence | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
-
 ## Multi-agent collaboration for cancer biomarker discovery
 
 Read more about sample agents to accelerate analysis and discovery of cancer biomarkers:
