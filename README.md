@@ -21,7 +21,8 @@ The key components are illustrated in the diagram below:
 ## Deployment
 
 > [!IMPORTANT]  
-> Before beginning the deployment, request access to the following Amazon Bedrock foundation models [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+> Before beginning the deployment, request access to the following Amazon Bedrock foundation models using the [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+
 > - Amazon Titan Embeddings G1 - Text
 > - Amazon Nova Pro
 > - Anthropic Claude 3.5 Sonnet
@@ -34,7 +35,7 @@ The key components are illustrated in the diagram below:
 > [!WARNING]  
 > Launching this stack will create 2 VPCs (Infrastructure and UI).
 
-### 1. Deploy the conversational interface and IAM role for Amazon Bedrock Agent by selecting your preferred region
+### 1. Deploy the toolkit application and Amazon Bedrock Agents service role for your preferred region
 
 | Name | us-east-1 | us-west-2 |
 | -- | ---------- | ----------------- |
