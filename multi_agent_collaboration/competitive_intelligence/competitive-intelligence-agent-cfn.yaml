@@ -11,15 +11,16 @@ Parameters:
   AgentIAMRoleArn:
     Type: String
     Description: The arn for the agent IAM role
-  WebSearchAgentAliasArn:
+  TavilyApiKey:
     Type: String
-    Description: The arn for the web search sub agent
-  SEC10kAgentAliasArn:
+    NoEcho: true
+    Description: Provide TavilyApiKey API Key to utilize /web_search path
+    MinLength: 1
+  USPTOApiKey:
     Type: String
-    Description: The arn for the SE 10-K search sub agent
-  USPTOAgentAliasArn:
-    Type: String
-    Description: The arn for the USPTO search sub agent    
+    NoEcho: true
+    Description: Provide USPTO API Key to utilize /search path
+    MinLength: 1  
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
@@ -28,6 +29,35 @@ Resources:
   #####################
   ##### Agent #####
   ###################
+
+  WebSearchAgentStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_web-search-agent-cfn.yaml
+      Parameters:
+        AgentAliasName: "Latest"
+        AgentIAMRoleArn: !Ref AgentIAMRoleArn
+        TavilyApiKey: !Ref TavilyApiKey
+      TimeoutInMinutes: 35
+
+  SEC10kAgentStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_sec-10-K-agent-cfn.yaml
+      Parameters:
+        AgentAliasName: "Latest"
+        AgentIAMRoleArn: !Ref AgentIAMRoleArn
+      TimeoutInMinutes: 35      
+
+  USPTOSearchAgentStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_uspto-search-agent-cfn.yaml
+      Parameters:
+        AgentAliasName: "Latest"
+        AgentIAMRoleArn: !Ref AgentIAMRoleArn
+        USPTOApiKey: !Ref USPTOApiKey
+      TimeoutInMinutes: 35      
 
   CompetitiveIntelligenceAgent:
     Type: AWS::Bedrock::Agent
@@ -40,7 +70,7 @@ Resources:
       AgentCollaborators:
         - CollaboratorName: Web-Search-Agent
           AgentDescriptor:
-            AliasArn: !Ref WebSearchAgentAliasArn
+            AliasArn: !GetAtt WebSearchAgentStack.Outputs.AgentAliasArn
           CollaborationInstruction: |
             Use the Web Search Agent to:
               - Find breaking news and recent developments
@@ -54,7 +84,7 @@ Resources:
             Focus searches on content from the past 3-6 months to complement the historical data from SEC filings with current market context.
         - CollaboratorName: SEC-10-K-Search-Agent
           AgentDescriptor:
-            AliasArn: !Ref SEC10kAgentAliasArn
+            AliasArn: !GetAtt SEC10kAgentStack.Outputs.AgentAliasArn
           CollaborationInstruction: |
             Use SEC 10-K Search Agent when you need specific quantitative financial information such as:
               - Revenue figures and year-over-year growth
@@ -64,7 +94,7 @@ Resources:
               - Debt levels and financing activities
         - CollaboratorName: USPTO-Search-Agent
           AgentDescriptor:
-            AliasArn: !Ref USPTOAgentAliasArn
+            AliasArn: !GetAtt USPTOSearchAgentStack.Outputs.AgentAliasArn
           CollaborationInstruction: |
             Use USPTO Search Agent when you need information about patent applications, such as:
               - Recent patent applications on given topic
@@ -178,3 +208,7 @@ Outputs:
     Description: Agent Alias ID
     Value: !GetAtt AgentAliasResource.AgentAliasId
     Condition: CreateAgentAliasCondition
+  AgentAliasArn:
+    Description: Agent Alias ARN
+    Value: !GetAtt AgentAliasResource.AgentAliasArn
+    Condition: CreateAgentAliasCondition    

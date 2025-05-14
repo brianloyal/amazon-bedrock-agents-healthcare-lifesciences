@@ -19,12 +19,15 @@ Parameters:
   S3CodeBucket:
     Description: Name of the S3 bucket to use for deployment and run storage
     Type: String
+    Default: "aws-hcls-ml"
   S3CodeKey:
     Description: S3 key for the zip file containing CodeBuild code
     Type: String
+    Default: "public_assets_support_materials/hcls_agent_toolkit/sec-10-k-docker.zip"
   ContainerName:
     Description: Name of the ECR project
     Type: String
+    Default: "sec-10-k-search"
   Timestamp:
     Description: Timestamp for the cfn deployment
     Type: Number
@@ -220,3 +223,7 @@ Outputs:
     Description: Agent Alias ID
     Value: !GetAtt AgentAliasResource.AgentAliasId
     Condition: CreateAgentAliasCondition
+  AgentAliasArn:
+    Description: Agent Alias ARN
+    Value: !GetAtt AgentAliasResource.AgentAliasArn
+    Condition: CreateAgentAliasCondition    

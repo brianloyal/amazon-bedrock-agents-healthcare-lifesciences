@@ -6,7 +6,7 @@ Description: >-
   container.yaml: Creates shared resources to build containers with AWS CodeBuild.
 Parameters:
   S3CodeBucket:
-    Description: Name of the S3 bucket to use for deployment and run storage
+    Description: S3 bucket name for the zip file containing CodeBuild code
     Type: String
   S3CodeKey:
     Description: S3 key for the zip file containing CodeBuild code
@@ -132,7 +132,6 @@ Resources:
               - Effect: Allow
                 Action:
                   - s3:GetObject
-                  - s3:PutObject
                 Resource:
                   - !Sub "arn:${AWS::Partition}:s3:::${S3CodeBucket}/*"
               - Effect: Allow

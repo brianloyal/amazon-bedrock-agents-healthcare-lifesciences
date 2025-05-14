@@ -205,3 +205,7 @@ Outputs:
     Description: Agent Alias ID
     Value: !GetAtt AgentAliasResource.AgentAliasId
     Condition: CreateAgentAliasCondition
+  AgentAliasArn:
+    Description: Agent Alias ARN
+    Value: !GetAtt AgentAliasResource.AgentAliasArn
+    Condition: CreateAgentAliasCondition

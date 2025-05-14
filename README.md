@@ -20,64 +20,41 @@ The key components are illustrated in the diagram below:
 
 ## Deployment
 
-### Note: You can choose to deploy some of the agents with one-click deployment or set them up yourself in workshop mode
-
 > [!IMPORTANT]  
-> Access to Amazon Bedrock foundation models (not granted by default). To gain access, follow the [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+> Before beginning the deployment, request access to the necessary Amazon Bedrock foundation models [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
 
 > [!NOTE]  
-> Full deployment takes approximately 20-30 minutes. 
+> Full deployment takes approximately 20-30 minutes.
 
-1. Stack can be launched in us-east-1 or us-west-2 by clicking launch stack below
+1. Deploy the conversational interface and IAM role for Amazon Bedrock Agent by selecting your preferred region:
 
-|   Region   | infra_cfn.yaml |
-| ---------- | ----------------- |
-| us-east-1  | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=biomakeragent&templateURL=https://aws-blogs-artifacts-public.s3.amazonaws.com/artifacts/ML-16901/Infra_cfn.yaml)|
-| us-west-2  | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=biomakeragent&templateURL=https://aws-blogs-artifacts-public.s3.amazonaws.com/artifacts/ML-16901/Infra_cfn.yaml)|
-
-Alternatively, upload the `Infra_cfn.yaml` file from the [amazon-bedrock-agents-healthcare-lifesciences](https://github.com/aws-samples/amazon-bedrock-agents-healthcare-lifesciences) repository to AWS CloudFormation. (Details of how to create a stack are shown [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-create-stack.html)).
-
-This template will set up:
 > [!WARNING]  
 > Launching this stack will create 2 VPCs (Infrastructure and UI).
 
-   - Networking infrastructure (VPC, Subnets, etc.)
-   - Amazon Redshift database
-   - Bedrock Agent with Actions
-   - Knowledgebase
-   - Streamlit UI frontend
-   - React App UI frontend
+| Name | us-east-1 | us-west-2 |
+| -- | ---------- | ----------------- |
+| App | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=hcls-agent-toolkit&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=biomakeragent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) |
 
+This template will set up:
 
-2. Deploy the `Infra_cfn.yaml` template:
-   - Default parameter values can remain unchanged
-   - Parameter descriptions:
-     - `BedrockModelId`: ID of the Foundation Model for the Agent (permissions scoped to Anthropic Claude 3 Sonnet model)
-     - `EnvironmentName`: Differentiates the application if launched in the same AWS account (lowercase, one number, max 5 characters)
-     - `RedshiftDatabaseName`: Name for the Redshift database
-     - `RedshiftUserName`: Username for Redshift database login
-     - `RedshiftPassword`: Password for Redshift database login [Remember and store password securely]
-          - `Note` : Redshift Only printable ASCII characters except for '/', '@', '"', ' ', '', ''' may be used
-     - `GithubLink`: Default repository for the Agent (do not change)
-     - `ImageTag`: Tag of the Docker image for Streamlit UI deployment
-     - `MultiAgentDevMode`: Select True to use a python notebook to manually create the agents step by step. Select false to auto create a subset of agents.
-     - `ReactAppAllowedCidr`: CIDR range from where access to the React UI is allowed. Learn about best practices in the AWS VPC [documentation](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html). To restrict React App UI access to just your IP, find your IP address through public websites such as [WhatIsMyIpAddress](https://whatismyipaddress.com/) and suffix it with `32`. For example, `1.2.3.4/32`
- 
-3. After stack launch is successful manually sync the Knowledgebase:
-   1. Navigate to the Bedrock dashboard via AWS Console search
-   2. Click the option icon (top left) to open the navigation bar
-   3. Select "Knowledge bases" under the "Builder tools" tab
-   4. Choose the Knowledgebase created by the CloudFormation template
-   5. Scroll to the "Data Source" option box
-   6. Select the data source (radio button) and click "Sync"
+- Networking infrastructure (VPC, Subnets, etc.)
+- React application on ECS
+- Amazon Bedrock Agents service role
 
-4. Access the React UI:
+To access the conversational interface:
+   
    1. Navigate to AWS CloudFormation via AWS Console search
    2. Click the parent stack name that was chosen to deploy the `Infra_cfn.yaml`
    3. In the Outputs tab, find the `ReactAppExternalURL` link and add 'https://' to the beginning of the URL and paste in your browser
    4. You should be able to see a landing page with all (or a subset) deployed agents as shown in the [video](https://d2dnsxs0d2upyb.cloudfront.net/agents-demo/agents_toolkit_overview.mp4) below:
-   
-   [![react-app-landing-page](docs/src/assets/agents_list_react_app.png)](https://d2dnsxs0d2upyb.cloudfront.net/agents-demo/agents_toolkit_overview.mp4) 
+
+   [![react-app-landing-page](docs/src/assets/agents_list_react_app.png)](https://d2dnsxs0d2upyb.cloudfront.net/agents-demo/agents_toolkit_overview.mp4)
+
+2. Deploy one or more of the multi-agent supervisors:
+
+| Name | us-east-1 | us-west-2 |
+| -- | ---------- | ----------------- |
+| Competitive Intelligence | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
 
 ## Multi-agent collaboration for cancer biomarker discovery
 
@@ -86,7 +63,7 @@ Read more about sample agents to accelerate analysis and discovery of cancer bio
 
 The multi-agent solution overview of [Cancer biomarker discovery](multi_agent_collaboration/cancer_biomarker_discovery/README.md) is illustrated below.
 
-![architecture](multi_agent_collaboration/cancer_biomarker_discovery/images/architecture.jpg) 
+![architecture](multi_agent_collaboration/cancer_biomarker_discovery/images/architecture.jpg)
 
 ## Model Context Protocol (MCP)
 
