@@ -9,8 +9,9 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: amazon.nova-pro-v1:0
   AgentIAMRoleArn:
-    Type: String
-    Description: The arn for the agent IAM role
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
+    Default: /bedrock/agent/role/arn
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]

@@ -148,4 +148,9 @@ if [ -f "$app_file" ]; then
   rm "../packaged_${app_name}.yaml"
 fi
 
+# Process additional artifacts
+echo "Uploading additional artifacts"
+aws s3 cp agents_catalog/15-clinical-study-research-agent/lambdalayers/matplotlib.zip "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/matplotlib.zip"
+aws s3 cp agents_catalog/10-SEC-10-K-agent/action-groups/SEC-10-K-search/docker/sec-10-k-docker.zip "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/sec-10-k-docker.zip"
+
 echo "All templates packaged and uploaded to S3"

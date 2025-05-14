@@ -12,12 +12,6 @@ Parameters:
   AgentIAMRoleArn:
     Type: String
     Description: The ARN for the agent IAM role
-  ChartImageBucketName:
-    Type: String
-    Description: S3 bucket name for storing chart images
-  LayersBucketName:
-    Type: String
-    Description: S3 bucket name for storing Lambda layers
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
@@ -30,7 +24,6 @@ Resources:
   ChartImageBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref ChartImageBucketName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -79,7 +72,7 @@ Resources:
                 Action:
                   - s3:PutObject
                   - s3:GetObject
-                Resource: !Sub arn:aws:s3:::${ChartImageBucketName}/*
+                Resource: !Sub arn:aws:s3:::${ChartImageBucket}/*
 
   DrugInformationLambdaRole:
     Type: AWS::IAM::Role
@@ -108,9 +101,8 @@ Resources:
       CompatibleRuntimes:
         - python3.11
       Content:
-        S3Bucket:
-          Ref: LayersBucketName
-        S3Key: lambdalayers/matplotlib.zip 
+        S3Bucket: "aws-hcls-ml"
+        S3Key: public_assets_support_materials/hcls_agent_toolkit/matplotlib.zip
 
   #######################
   ##### Lambda Functions #####
@@ -147,7 +139,7 @@ Resources:
         Variables:
           ACTION_GROUP: "clinical_visualizer_action_group"
           LOG_LEVEL: "DEBUG"
-          CHART_IMAGE_BUCKET: !Ref ChartImageBucketName
+          CHART_IMAGE_BUCKET: !Ref ChartImageBucket
       Layers:
         - !Ref MatplotlibLayer
       Code: "action_groups/clinical-visualizer"
@@ -344,16 +336,16 @@ Resources:
 
         You accept both structured inputs (e.g., condition, intervention, outcome) and natural language queries (e.g., "Find double-arm diabetes trials in males under 60") 
         and convert them into valid API queries using the ClinicalTrials.gov v2 syntax.
-        
+
         When analyzing clinical trial data, follow these steps:
-        
+
         1. Understand the user's specific research question or information need
         2. Identify the appropriate search parameters (condition, intervention, outcome, etc.)
         3. Execute the appropriate search function with these parameters
         4. Present results in a clear, organized manner
         5. Offer to create visualizations when appropriate
         6. Suggest related drug information when relevant
-        
+
         Always prioritize accuracy and relevance in your responses, and be prepared to refine searches based on user feedback.
 
   AgentAliasResource:
@@ -370,6 +362,10 @@ Outputs:
   AgentAliasId:
     Description: Agent Alias ID
     Value: !GetAtt AgentAliasResource.AgentAliasId
+    Condition: CreateAgentAliasCondition
+  AgentAliasArn:
+    Description: Agent Alias ARN
+    Value: !GetAtt AgentAliasResource.AgentAliasArn
     Condition: CreateAgentAliasCondition
   ClinicalStudySearchLambdaArn:
     Description: ARN of the Clinical Study Search Lambda function

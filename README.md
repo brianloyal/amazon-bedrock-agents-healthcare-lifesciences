@@ -20,22 +20,24 @@ The key components are illustrated in the diagram below:
 
 ## Deployment
 
-> [!IMPORTANT]  
-> Before beginning the deployment, request access to the following Amazon Bedrock foundation models using the [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
+### 1. Request Amazon Bedrock model access
 
-> - Amazon Titan Embeddings G1 - Text
-> - Amazon Nova Pro
-> - Anthropic Claude 3.5 Sonnet
-> - Anthropic Claude 3.5 Sonnet v2
-> - Anthropic Claude 3 Sonnet
+Request access to the following Amazon Bedrock foundation models using the [official documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html).
 
-> [!NOTE]  
-> Full deployment takes approximately 20-30 minutes.
+- Amazon Titan Embeddings G1 - Text
+- Amazon Nova Pro
+- Anthropic Claude 3.5 Sonnet
+- Anthropic Claude 3.5 Sonnet v2
+- Anthropic Claude 3 Sonnet
+
+### 2. Request service quota increase
+
+Request an increase of the Amazon Bedrock "Parameters per function" quota to at least 10.
+
+### 3. Deploy the toolkit application and starter agents for your preferred region
 
 > [!WARNING]  
 > Launching this stack will create 2 VPCs (Infrastructure and UI).
-
-### 1. Deploy the toolkit application and Amazon Bedrock Agents service role for your preferred region
 
 | Name | us-east-1 | us-west-2 |
 | -- | ---------- | ----------------- |
@@ -46,20 +48,18 @@ This template will set up:
 - Networking infrastructure (VPC, Subnets, etc.)
 - React application on ECS
 - Amazon Bedrock Agents service role
+- Clinical Trial Protocol Assistant supervisor and sub agents.
 
-### 2. Deploy one or more of the multi-agent supervisors
+Please note that it may take up to 30 minutes to finish the deployment.
+
+### 4. (Optional) Deploy one or more additional agents
 
 | Name | us-east-1 | us-west-2 |
 | -- | ---------- | ----------------- |
 | Competitive Intelligence | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
-
-### 3. (Optional) Deploy one or more single agents
-
-| Name | us-east-1 | us-west-2 |
-| -- | ---------- | ----------------- |
 | Wiley Online Search | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) |
 
-### 4. Access the conversational interface
+### 5. Access the toolkit application
 
 1. Navigate to AWS CloudFormation via AWS Console search
 2. Click the parent stack name that was chosen to deploy the `Infra_cfn.yaml`

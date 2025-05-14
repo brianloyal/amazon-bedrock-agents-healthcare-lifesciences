@@ -11,12 +11,6 @@ Parameters:
   AgentIAMRoleArn:
     Type: String
     Description: The arn for the agent IAM role
-  ClinicalStudySearchAgentAliasArn:
-    Type: String
-    Description: The arn for the clinical search sub agent
-  ClinicalTrialProtocolGeneratorAgentAliasArn:
-    Type: String
-    Description: The arn for the clinical trial protocol generator sub agent
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
@@ -25,6 +19,24 @@ Resources:
   #####################
   ##### Agent #####
   ###################
+
+  ClinicalStudySearchAgentStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_clinical-study-agent.yaml
+      Parameters:
+        AgentAliasName: "Latest"
+        AgentIAMRoleArn: !Ref AgentIAMRoleArn
+      TimeoutInMinutes: 35
+
+  ClinicalTrialProtocolGeneratorAgentStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_clinical-trial-protocol-agent.yaml
+      Parameters:
+        AgentAliasName: "Latest"
+        AgentIAMRoleArn: !Ref AgentIAMRoleArn
+      TimeoutInMinutes: 35
 
   ClinicalTrialProtocolAssistantAgent:
     Type: AWS::Bedrock::Agent
@@ -37,25 +49,15 @@ Resources:
       AgentCollaborators:
         - CollaboratorName: Clinical-Study-Search-Agent
           AgentDescriptor:
-            AliasArn: !Ref ClinicalStudySearchAgentAliasArn
+            AliasArn: !GetAtt ClinicalStudySearchAgentStack.Outputs.AgentAliasArn
           CollaborationInstruction: |
             Clinical Study Search Agent searches through clinical trial data source lie clinicaltrials.gov to find past studies that match what you're looking for—based on condition, treatment, study phase, patient type, or other filters. It brings back detailed information about the past studies, including the study design, goals, participants, and key outcomes. These results can then be used to help design new clinical trials or generate protocol documents.
         - CollaboratorName: Clinical-Trial-Protocol-Generator-Agent
           AgentDescriptor:
-            AliasArn: !Ref ClinicalTrialProtocolGeneratorAgentAliasArn
+            AliasArn: !GetAtt ClinicalTrialProtocolGeneratorAgentStack.Outputs.AgentAliasArn
           CollaborationInstruction: |
             This agent helps you write a complete clinical trial protocol. It knows the structure and required sections, and can either start from scratch or use past studies (from the search agent) as references. It fills in key sections like objectives, study design, and eligibility criteria. You can then edit the document or regenerate specific sections. Perfect for trial managers or medical writers looking to save time.
-      AgentName:
-        !Join [
-          "-",
-          [
-            "clinical-trial-protocol-assistant",
-            !Select [
-              4,
-              !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]],
-            ],
-          ],
-        ]
+      AgentName: "clinical-trial-protocol-assistant"
       AgentResourceRoleArn: !Ref AgentIAMRoleArn
       AutoPrepare: True
       Description: "Clinical Trial Protocol Assistant for developing comprehensive clinical trial protocols"
@@ -151,4 +153,8 @@ Outputs:
   AgentAliasId:
     Description: Agent Alias ID
     Value: !GetAtt AgentAliasResource.AgentAliasId
+    Condition: CreateAgentAliasCondition
+  AgentAliasArn:
+    Description: Agent Alias ARN
+    Value: !GetAtt AgentAliasResource.AgentAliasArn
     Condition: CreateAgentAliasCondition
