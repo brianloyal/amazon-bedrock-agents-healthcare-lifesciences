@@ -4,6 +4,9 @@
 
 Answer questions using up-to-date information retrieved by the [Tavily Search API](https://tavily.com/).
 
+> [!IMPORTANT]  
+> This agent requires an API key from [Tavily](https://tavily.com/). Please complete your account registration before deploying this agent.
+
 ## 2. Agent Details
 
 ### 2.1. Instructions

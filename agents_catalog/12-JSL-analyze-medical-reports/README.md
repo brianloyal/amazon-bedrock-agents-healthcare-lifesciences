@@ -4,6 +4,13 @@
 
 Analyze medical text using John Snow Labs medical LLMs deployed on Amazon SageMaker. Note that this agent requires a subscription to one or more AWS Marketplace products.
 
+> [!IMPORTANT]  
+> This agent requires an [AWS Marketplace subscription](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-marketplace-subscribe-to-a-model.html) to the following models:
+> - **Extract Social Determinants of Health** (Product 1681a948-a003-4c34-81be-7f633d14890d)
+> - **ICD-10-CM Sentence entity resolver** (Product 23387793-337a-4161-b5d0-e899240438ef)
+>
+> Please subscribe to all required models your preferred AWS account before deploying this agent.
+
 ## 2. Agent Details
 
 ### 2.1. Instructions

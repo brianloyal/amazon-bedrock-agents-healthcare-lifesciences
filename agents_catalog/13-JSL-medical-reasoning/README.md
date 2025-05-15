@@ -4,6 +4,12 @@
 
 Analyze medical text using medical reasoning model from John Snow Labs deployed on Amazon SageMaker. Note that this agent requires a subscription to one or more AWS Marketplace products.
 
+> [!IMPORTANT]  
+> This agent requires an [AWS Marketplace subscription](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-marketplace-subscribe-to-a-model.html) to the following model:
+> - **Medical Reasoning LLM** - 14B (Product prod-f4y6ytsuvm5po)
+>
+> Please subscribe to all required models your preferred AWS account before deploying this agent.
+
 ## 2. Agent Details
 
 ### 2.1. Instructions

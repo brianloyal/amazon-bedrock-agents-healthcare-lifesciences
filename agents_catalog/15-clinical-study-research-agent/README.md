@@ -2,6 +2,9 @@
 
 This agent helps users explore, filter, and analyze clinical trial data from public registries like ClinicalTrials.gov. It assists with condition-specific study identification, intervention tracking, sponsor profiling, and outcome analysis using structured search criteria.
 
+> [!IMPORTANT]  
+> Before deploying this agent, verify that the Amazon Bedrock "Parameters per function" service limit is at least 9. If not, request a service limit increase.
+
 ## Features
 
 - **Clinical Study Search**: Search for clinical trials based on conditions, interventions, outcomes, and other parameters
@@ -32,6 +35,8 @@ The agent is deployed using AWS CloudFormation. The template creates all necessa
 - AWS CLI configured with appropriate permissions
 - Amazon Bedrock access
 - IAM role for the Bedrock agent
+
+
 
 ### Deployment Steps
 

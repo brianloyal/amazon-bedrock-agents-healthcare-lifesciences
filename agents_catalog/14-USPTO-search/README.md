@@ -4,6 +4,9 @@
 
 Search the USPTO Open Data Portal. Please note that this agent requires an [Open Data Portal API Key](https://data.uspto.gov/apis/getting-started).
 
+> [!IMPORTANT]  
+> This agent requires an API key from the [USPTO Open Data Poartal (ODP)](https://data.uspto.gov/apis/getting-started). Please complete your ODP account registration before deploying this agent.
+
 ## 2. Agent Details
 
 ### 2.1. Instructions

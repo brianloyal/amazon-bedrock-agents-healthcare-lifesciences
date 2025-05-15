@@ -4,6 +4,9 @@
 
 Answer questions regarding company financial data reported on SEC 10-K forms.
 
+> [!IMPORTANT]  
+> This agent requires an API key from the [US SEC](https://www.sec.gov/search-filings/edgar-application-programming-interfaces). Please complete your account registration before deploying this agent.
+
 ## 2. Agent Details
 
 ### 2.1. Instructions
