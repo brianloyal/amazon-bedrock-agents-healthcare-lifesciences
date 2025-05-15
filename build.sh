@@ -119,16 +119,16 @@ cd ..
 echo "Processing app templates"
 
 # Prepare UI artifact and upload to S3
-# if [ -d "ui" ]; then
-#   echo "Preparing React UI artifact..."
-#   cd ui || exit
-#   zip -r ui_artifact.zip . -x "node_modules/*"
-#   echo "Uploading React UI artifact to S3..."
-#   aws s3 cp "ui_artifact.zip" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_artifact.zip"
-#   echo "React UI artifact uploaded to S3, deleting local copy"
-#   rm "ui_artifact.zip"
-#   cd ..
-# fi
+if [ -d "ui" ]; then
+  echo "Preparing React UI artifact..."
+  cd ui || exit
+  zip -r ui_artifact.zip . -x "node_modules/*"
+  echo "Uploading React UI artifact to S3..."
+  aws s3 cp "ui_artifact.zip" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_artifact.zip"
+  echo "React UI artifact uploaded to S3, deleting local copy"
+  rm "ui_artifact.zip"
+  cd ..
+fi
 
 # Process react app docker build template
 echo "Processing react app docker build template..."
@@ -146,6 +146,20 @@ if [ -f "$app_file" ]; then
   # Copy to S3 immediately after packaging
   aws s3 cp "../packaged_${app_name}.yaml" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/packaged_${app_name}.yaml"
   rm "../packaged_${app_name}.yaml"
+fi
+
+# Process react app docker build template
+echo "Processing react app docker build template..."
+if [ -d "ui" ] && [ -f "ui/cloudformation/docker_build_pipeline.yml" ]; then
+  echo "Copying react app docker build template"
+  aws s3 cp "ui/cloudformation/docker_build_pipeline.yml" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_docker_build_pipeline.yaml"
+fi
+
+# Process react app ECS service build template
+echo "Processing react app ECS service build template..."
+if [ -d "ui" ] && [ -f "ui/cloudformation/ecs.yml" ]; then
+  echo "Copying react app ECS build template"
+  aws s3 cp "ui/cloudformation/ecs.yml" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_ecs.yaml"
 fi
 
 # Process additional artifacts
