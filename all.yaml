@@ -26,12 +26,16 @@ Resources:
 
   ClinicalTrialProtocolSupervisorStack:
     Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - AppStack
     Properties:
       TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_clinical-trial-protocol-assistant-cfn.yaml
       TimeoutInMinutes: 35
 
   CompetitiveIntelligenceSupervisorStack:
     Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - AppStack
     Properties:
       TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml
       Parameters:
@@ -41,6 +45,8 @@ Resources:
 
   WileyOnlineSearchStack:
     Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - AppStack
     Properties:
       TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml
       TimeoutInMinutes: 35
