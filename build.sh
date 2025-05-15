@@ -148,6 +148,24 @@ if [ -f "$app_file" ]; then
   rm "../packaged_${app_name}.yaml"
 fi
 
+# Process "All"  template
+echo "Processing 'All' template..."
+app_file="all.yaml"
+if [ -f "$app_file" ]; then
+  echo "Found file: ${app_file}"
+  app_name=$(basename "${app_file}" .yaml)
+  echo "Packaging app: ${app_file}"
+  aws cloudformation package \
+    --template-file "${app_file}" \
+    --s3-bucket "${S3_BUCKET}" \
+    --s3-prefix "public_assets_support_materials/hcls_agent_toolkit" \
+    --output-template-file "../packaged_${app_name}.yaml"
+
+  # Copy to S3 immediately after packaging
+  aws s3 cp "../packaged_${app_name}.yaml" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/packaged_${app_name}.yaml"
+  rm "../packaged_${app_name}.yaml"
+fi
+
 # Process react app docker build template
 echo "Processing react app docker build template..."
 if [ -d "ui" ] && [ -f "ui/cloudformation/docker_build_pipeline.yml" ]; then
