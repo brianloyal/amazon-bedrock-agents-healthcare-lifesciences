@@ -471,15 +471,15 @@ Resources:
                   - !Sub arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:application-inference-profile/*
                   - !Sub arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:guardrail/*
 
-  ClinicalTrialProtocolAssistantStack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_clinical-trial-protocol-assistant-cfn.yaml
-      Parameters:
-        AgentAliasName: "Latest"
-        BedrockModelId: !Ref BedrockModelId
-        AgentIAMRoleArn: !GetAtt AgentRole.Arn
-      TimeoutInMinutes: 35
+  # ClinicalTrialProtocolAssistantStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_clinical-trial-protocol-assistant-cfn.yaml
+  #     Parameters:
+  #       AgentAliasName: "Latest"
+  #       BedrockModelId: !Ref BedrockModelId
+  #       AgentIAMRoleArn: !GetAtt AgentRole.Arn
+  #     TimeoutInMinutes: 35
 
   AgentRoleARNParameter:
     Type: AWS::SSM::Parameter
