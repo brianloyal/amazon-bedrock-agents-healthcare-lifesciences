@@ -3,7 +3,7 @@ Description: Creates the SEC 10-K agent for searching using the EDGAR API.
 Parameters:
   AgentAliasName:
     Type: String
-    Default: ""
+    Default: "Latest"
   BedrockModelId:
     Type: String
     Description: The ID of the Foundation Model to use for the Agent

@@ -10,7 +10,7 @@ Metadata:
 Parameters:
   AgentAliasName:
     Type: String
-    Default: ""
+    Default: "Latest"
   BedrockModelId:
     Type: String
     Description: The ID of the Foundation Model to use for the Agent

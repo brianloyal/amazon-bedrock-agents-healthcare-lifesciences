@@ -3,7 +3,7 @@ Description: Creates an Amazon Bedrock Agent for analyzing medical reports using
 Parameters:
   AgentAliasName:
     Type: String
-    Default: "LATEST"
+    Default: "Latest"
   BedrockModelId:
     Type: String
     Description: The ID of the Foundation Model to use for the Agent
@@ -157,8 +157,8 @@ Resources:
       Description: "Extract adverse drug events from unstructured clinical texts"
       FoundationModel: !Ref BedrockModelId
       GuardrailConfiguration:
-        GuardrailIdentifier: !GetAtt Guardrail.GuardrailId
-        GuardrailVersion: !GetAtt Guardrail.Version
+        GuardrailIdentifier: !GetAtt MedicalAnalysisGuardrail.GuardrailId
+        GuardrailVersion: !GetAtt MedicalAnalysisGuardrail.Version
       Instruction: |
         You are a medical text analysis assistant powered by a large language model.
         You help analyze clinical and medical documentation using specialized NLP tools, but you DO NOT provide clinical guidance, diagnosis, treatment recommendations, or interpret medical implications for individual patients.
@@ -179,7 +179,7 @@ Resources:
       AgentId: !GetAtt Agent.AgentId
       AgentAliasName: !Ref AgentAliasName
 
-  Guardrail:
+  MedicalAnalysisGuardrail:
     Type: AWS::Bedrock::Guardrail
     Properties:
       BlockedInputMessaging: "Sorry, your query violates our usage policies."
@@ -193,7 +193,7 @@ Resources:
             OutputStrength: "NONE"
             Type: "PROMPT_ATTACK"
       Description: Turn on to block profane words and other harmful content.
-      Name: ADEGuardrail
+      Name: MedicalAnalysisGuardrail
       WordPolicyConfig:
         ManagedWordListsConfig:
           - Type: PROFANITY
