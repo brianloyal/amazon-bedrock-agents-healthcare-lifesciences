@@ -16,9 +16,9 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: us.anthropic.claude-3-5-sonnet-20241022-v2:0
   AgentIAMRoleArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
-    Default: /bedrock/agent/role/arn
+    Type: String
+    Description: (Optional) Amazon Bedrock Agents service role ARN
+    Default: ""
   USPTOApiKey:
     Type: String
     NoEcho: true
@@ -28,6 +28,7 @@ Parameters:
 Conditions:
   HasUSPTOApiKeyCondition: !Not [!Equals [!Ref USPTOApiKey, ""]]
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
+  AgentIAMRoleCondition: !Not [!Equals [!Ref AgentIAMRoleArn, ""]]
 
 Resources:
   #####################
@@ -142,7 +143,12 @@ Resources:
                     Type: string
                     Required: False
       AgentName: "USPTO-Search-Agent"
-      AgentResourceRoleArn: !Ref AgentIAMRoleArn
+      # If an IAM role ARN is passed as a paremter, use it. Otherwise look in SSM parameter store
+      AgentResourceRoleArn:
+        "Fn::If":
+          - AgentIAMRoleCondition
+          - !Ref AgentIAMRoleArn
+          - "{{resolve:ssm:/bedrock/agent/role/arn:1}}"
       AutoPrepare: True
       Description: "Get Patent information from the US Patent and Trademark Office"
       FoundationModel: !Ref BedrockModelId

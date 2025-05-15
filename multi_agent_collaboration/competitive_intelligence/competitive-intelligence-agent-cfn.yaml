@@ -9,9 +9,9 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: us.anthropic.claude-3-5-sonnet-20241022-v2:0
   AgentIAMRoleArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
-    Default: /bedrock/agent/role/arn
+    Type: String
+    Description: (Optional) Amazon Bedrock Agents service role ARN
+    Default: ""
   TavilyApiKey:
     Type: String
     NoEcho: true
@@ -21,10 +21,11 @@ Parameters:
     Type: String
     NoEcho: true
     Description: Provide USPTO API Key to utilize /search path
-    MinLength: 1  
+    MinLength: 1
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
+  AgentIAMRoleCondition: !Not [!Equals [!Ref AgentIAMRoleArn, ""]]
 
 Resources:
   #####################
@@ -48,7 +49,7 @@ Resources:
       Parameters:
         AgentAliasName: "Latest"
         AgentIAMRoleArn: !Ref AgentIAMRoleArn
-      TimeoutInMinutes: 35      
+      TimeoutInMinutes: 35
 
   USPTOSearchAgentStack:
     Type: AWS::CloudFormation::Stack
@@ -58,7 +59,7 @@ Resources:
         AgentAliasName: "Latest"
         AgentIAMRoleArn: !Ref AgentIAMRoleArn
         USPTOApiKey: !Ref USPTOApiKey
-      TimeoutInMinutes: 35      
+      TimeoutInMinutes: 35
 
   CompetitiveIntelligenceAgent:
     Type: AWS::Bedrock::Agent
@@ -102,7 +103,12 @@ Resources:
               - The inventor, filing date, or applicant of a given patent
 
       AgentName: Competitive-Intelligence-Agent
-      AgentResourceRoleArn: !Ref AgentIAMRoleArn
+      # If an IAM role ARN is passed as a paremter, use it. Otherwise look in SSM parameter store
+      AgentResourceRoleArn:
+        "Fn::If":
+          - AgentIAMRoleCondition
+          - !Ref AgentIAMRoleArn
+          - "{{resolve:ssm:/bedrock/agent/role/arn:1}}"
       AutoPrepare: True
       Description: "Analyze business, financial, and patent information using search"
       FoundationModel: !Ref BedrockModelId
@@ -212,4 +218,4 @@ Outputs:
   AgentAliasArn:
     Description: Agent Alias ARN
     Value: !GetAtt AgentAliasResource.AgentAliasArn
-    Condition: CreateAgentAliasCondition    
+    Condition: CreateAgentAliasCondition

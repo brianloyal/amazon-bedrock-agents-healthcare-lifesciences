@@ -9,12 +9,14 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: us.anthropic.claude-3-5-sonnet-20240620-v1:0
   AgentIAMRoleArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
-    Default: /bedrock/agent/role/arn
+    Type: String
+    Description: (Optional) Amazon Bedrock Agents service role ARN
+    Default: ""
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
+  AgentIAMRoleCondition: !Not [!Equals [!Ref AgentIAMRoleArn, ""]]
+
 
 Resources:
   #####################
@@ -59,7 +61,12 @@ Resources:
           CollaborationInstruction: |
             This agent helps you write a complete clinical trial protocol. It knows the structure and required sections, and can either start from scratch or use past studies (from the search agent) as references. It fills in key sections like objectives, study design, and eligibility criteria. You can then edit the document or regenerate specific sections. Perfect for trial managers or medical writers looking to save time.
       AgentName: "clinical-trial-protocol-assistant"
-      AgentResourceRoleArn: !Ref AgentIAMRoleArn
+      # If an IAM role ARN is passed as a paremter, use it. Otherwise look in SSM parameter store
+      AgentResourceRoleArn:
+        "Fn::If":
+          - AgentIAMRoleCondition
+          - !Ref AgentIAMRoleArn
+          - "{{resolve:ssm:/bedrock/agent/role/arn:1}}"
       AutoPrepare: True
       Description: "Clinical Trial Protocol Assistant for developing comprehensive clinical trial protocols"
       FoundationModel: !Ref BedrockModelId

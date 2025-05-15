@@ -9,9 +9,9 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: us.anthropic.claude-3-5-sonnet-20241022-v2:0
   AgentIAMRoleArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
-    Default: /bedrock/agent/role/arn
+    Type: String
+    Description: (Optional) Amazon Bedrock Agents service role ARN
+    Default: ""
   UserAgentString:
     Type: String
     NoEcho: true
@@ -36,6 +36,7 @@ Parameters:
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
+  AgentIAMRoleCondition: !Not [!Equals [!Ref AgentIAMRoleArn, ""]]
 
 Resources:
   ########################
@@ -146,7 +147,7 @@ Resources:
                   query:
                     Description: "Topic or question to search against all available SEC tags in the us-gaap taxonomy"
                     Type: string
-                    Required: True                    
+                    Required: True
               - Name: get_company_concept
                 Description: Get all the us-gaap disclosures for a single company (CIK) and concept (tag), with a separate array of facts for each unit of measure that the company has chosen to disclose (e.g. net profits reported in U.S. dollars and in Canadian dollars).
                 Parameters:
@@ -159,7 +160,12 @@ Resources:
                     Type: string
                     Required: True
       AgentName: "SEC-10-K-Search-Agent"
-      AgentResourceRoleArn: !Ref AgentIAMRoleArn
+      # If an IAM role ARN is passed as a paremter, use it. Otherwise look in SSM parameter store
+      AgentResourceRoleArn:
+        "Fn::If":
+          - AgentIAMRoleCondition
+          - !Ref AgentIAMRoleArn
+          - "{{resolve:ssm:/bedrock/agent/role/arn:1}}"
       AutoPrepare: True
       Description: "Perform financial analysis of a given company using the their SEC 10-K filings in the EDGAR database"
       FoundationModel: !Ref BedrockModelId
@@ -227,4 +233,4 @@ Outputs:
   AgentAliasArn:
     Description: Agent Alias ARN
     Value: !GetAtt AgentAliasResource.AgentAliasArn
-    Condition: CreateAgentAliasCondition    
+    Condition: CreateAgentAliasCondition

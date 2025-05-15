@@ -10,12 +10,13 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
   AgentIAMRoleArn:
-    Type: AWS::SSM::Parameter::Value<String>
-    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
-    Default: /bedrock/agent/role/arn
+    Type: String
+    Description: (Optional) Amazon Bedrock Agents service role ARN
+    Default: ""
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
+  AgentIAMRoleCondition: !Not [!Equals [!Ref AgentIAMRoleArn, ""]]
 
 Resources:
   #######################
@@ -116,7 +117,12 @@ Resources:
                   Retrieves clinical trial protocol templates based on the common data model (CDM).
                 Parameters: {}
       AgentName: clinical-trial-protocol-generator-agent
-      AgentResourceRoleArn: !Ref AgentIAMRoleArn
+      # If an IAM role ARN is passed as a paremter, use it. Otherwise look in SSM parameter store
+      AgentResourceRoleArn:
+        "Fn::If":
+          - AgentIAMRoleCondition
+          - !Ref AgentIAMRoleArn
+          - "{{resolve:ssm:/bedrock/agent/role/arn:1}}"
       AutoPrepare: True
       Description: "Agent that helps users create, review, and optimize clinical trial protocols based on best practices and common data models"
       FoundationModel: !Ref BedrockModelId
