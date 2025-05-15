@@ -10,8 +10,9 @@ Parameters:
     Description: The ID of the Foundation Model to use for the Agent
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
   AgentIAMRoleArn:
-    Type: String
-    Description: The ARN for the agent IAM role
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: Name of AWS Systems Manager parameter containing Amazon Bedrock Agents service role ARN
+    Default: /bedrock/agent/role/arn
 
 Conditions:
   CreateAgentAliasCondition: !Not [!Equals [!Ref AgentAliasName, ""]]
