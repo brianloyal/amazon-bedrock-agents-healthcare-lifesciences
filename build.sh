@@ -119,16 +119,16 @@ cd ..
 echo "Processing app templates"
 
 # Prepare UI artifact and upload to S3
-if [ -d "ui" ]; then
-  echo "Preparing React UI artifact..."
-  cd ui || exit
-  zip -r ui_artifact.zip . -x "node_modules/*"
-  echo "Uploading React UI artifact to S3..."
-  aws s3 cp "ui_artifact.zip" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_artifact.zip"
-  echo "React UI artifact uploaded to S3, deleting local copy"
-  rm "ui_artifact.zip"
-  cd ..
-fi
+# if [ -d "ui" ]; then
+#   echo "Preparing React UI artifact..."
+#   cd ui || exit
+#   zip -r ui_artifact.zip . -x "node_modules/*"
+#   echo "Uploading React UI artifact to S3..."
+#   aws s3 cp "ui_artifact.zip" "s3://${S3_BUCKET}/public_assets_support_materials/hcls_agent_toolkit/ui_artifact.zip"
+#   echo "React UI artifact uploaded to S3, deleting local copy"
+#   rm "ui_artifact.zip"
+#   cd ..
+# fi
 
 # Process react app docker build template
 echo "Processing react app docker build template..."
