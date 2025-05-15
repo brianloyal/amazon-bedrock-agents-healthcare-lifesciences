@@ -34,32 +34,38 @@ Request access to the following Amazon Bedrock foundation models using the [offi
 
 Request an increase of the Amazon Bedrock "Parameters per function" quota to at least 10.
 
-### 3. Deploy the toolkit application and starter agents for your preferred region
+### 3. Deploy the toolkit application and agents for your preferred region
 
-> [!WARNING]  
-> Launching this stack will create 2 VPCs (Infrastructure and UI).
+Pleas follow one of these two deployment paths. It may take up to 30 minutes to finish the deployment.
 
-| Name | us-east-1 | us-west-2 |
-| -- | ---------- | ----------------- |
-| App | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=hcls-agent-toolkit&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=biomakeragent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) |
+#### 3.1. Deployment Path 1: Deploy all agents
 
-This template will set up:
-
-- Networking infrastructure (VPC, Subnets, etc.)
-- React application on ECS
-- Amazon Bedrock Agents service role
-- Clinical Trial Protocol Assistant supervisor and sub agents.
-
-Please note that it may take up to 30 minutes to finish the deployment.
-
-### 4. (Optional) Deploy one or more additional agents
+Choose _Launch Stack_ for your preferred region to deploy the toolkit application and all agents into your AWS account.
 
 | Name | us-east-1 | us-west-2 |
 | -- | ---------- | ----------------- |
-| Competitive Intelligence | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
-| Wiley Online Search | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) |
+| All resources | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=hcls-agent-toolkit&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=biomakeragent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) |
 
-### 5. Access the toolkit application
+#### 3.2. Deployment Path 2: Deploy selected agents
+
+1. Choose _Launch Stack_ for your preferred region to deploy the toolkit application into your AWS account. This action does not deploy any agents.
+
+| Name | us-east-1 | us-west-2 |
+| -- | ---------- | ----------------- |
+| Toolkit application | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=hcls-agent-toolkit&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=biomakeragent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_app.yaml) |
+
+2. Choose _Launch Stack_ for your preferred region to deploy one or more agents into your AWS account.
+
+| Name | us-east-1 | us-west-2 |
+| -- | ---------- | ----------------- |
+| Biomarker Discovery Assistant | ![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png) | ![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png) |
+| Clinical Trial Protocol Assistant | ![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png) | ![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png) |
+| Competitive Intelligence Assistant | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=competitive-intelligence-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_competitive-intelligence-agent-cfn.yaml) |
+| Wiley Online Search Agent | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=wiley-online-search-agent&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_wiley-search-agent-cfn.yaml) |
+| John Snow Labs Medical Report Analysis Agent | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jsl-analyze-med-reports&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_jsl-analyze-medical-reports.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=jsl-analyze-med-reports&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_jsl-analyze-medical-reports.yaml) |
+| John Snow Labs Medical Reasoning Agent | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=jsl-med-reasoning&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_jsl-medical-reasoning.yaml) | [![launch-stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=jsl-med-reasoning&templateURL=https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_jsl-medical-reasoning.yaml) |
+
+### 4. Access the toolkit application
 
 1. Navigate to AWS CloudFormation via AWS Console search
 2. Click the parent stack name that was chosen to deploy the `Infra_cfn.yaml`
