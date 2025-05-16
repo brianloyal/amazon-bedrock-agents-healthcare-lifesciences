@@ -6,7 +6,9 @@ Parameters:
   EnvironmentName:
     Type: String
     Description: The name of the agent environment, used to differentiate agent application. Must be lowercase, contain one number, and be no more than 5 characters long.
-    Default: cancer-biomarker-discovery
+    Default: env1
+    MaxLength: 5
+    AllowedPattern: ^[a-z]{1,4}[0-9]$
   RedshiftDatabaseName:
     Type: String
     Default: dev

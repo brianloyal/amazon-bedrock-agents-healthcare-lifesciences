@@ -184,7 +184,8 @@ Resources:
   AgentRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub AmazonBedrockExecutionRoleForAgents_${AWS::AccountId}
+      # RoleName: !Sub AmazonBedrockExecutionRoleForAgents_${AWS::AccountId}
+      RoleName: AmazonBedrockExecutionRoleForAgents_hcls_agents_toolkit
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
