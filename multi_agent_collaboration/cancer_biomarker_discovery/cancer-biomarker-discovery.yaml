@@ -1176,8 +1176,6 @@ Resources:
       - CleanupCustomResource
       - RedshiftCluster
     Properties:
-      # TemplateURL: !Sub https://${S3Bucket}.s3.${AWS::Region}.amazonaws.com/packaged_agent_build.yaml
-      # TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_agent_build.yaml
       TemplateURL: !Sub https://${S3Bucket}.s3.${AWS::Region}.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_agent_build.yaml
       Parameters:
         BedrockModelId: !Ref BedrockModelId
