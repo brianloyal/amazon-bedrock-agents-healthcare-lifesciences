@@ -1169,21 +1169,24 @@ Resources:
               commands:
                 - echo Build completed on `date`
 
-  # AgentBuildNestedStack:
-  #   Type: AWS::CloudFormation::Stack
-  #   DependsOn:
-  #     - TriggerAgentBuildCustomResource
-  #     - CleanupCustomResource
-  #     - RedshiftCluster
-  #   Properties:
-  #     TemplateURL: !Sub https://${S3Bucket}.s3.${AWS::Region}.amazonaws.com/packaged_agent_build.yaml
-  #     Parameters:
-  #       BedrockModelId: !Ref BedrockModelId
-  #       MultiAgentDevMode: !Ref MultiAgentDevMode
-  #       EnvironmentName: !Ref EnvironmentName
-  #       GitBranch: !Ref GitBranch
-  #       SubAgentS3Bucket: !Ref S3Bucket
-  #     TimeoutInMinutes: 30
+  AgentBuildNestedStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - TriggerAgentBuildCustomResource
+      - CleanupCustomResource
+      - RedshiftCluster
+    Properties:
+      # TemplateURL: !Sub https://${S3Bucket}.s3.${AWS::Region}.amazonaws.com/packaged_agent_build.yaml
+      # TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_agent_build.yaml
+      TemplateURL: !Sub https://${S3Bucket}.s3.${AWS::Region}.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_agent_build.yaml
+      Parameters:
+        BedrockModelId: !Ref BedrockModelId
+        MultiAgentDevMode: !Ref MultiAgentDevMode
+        EnvironmentName: !Ref EnvironmentName
+        GitRepoURL: !Ref GithubLink
+        GitBranch: !Ref GitBranch
+        SubAgentS3Bucket: !Ref S3Bucket
+      TimeoutInMinutes: 30
 
 Outputs:
   RedshiftClusterEndpoint:
