@@ -1575,7 +1575,7 @@ Resources:
     DependsOn: AgentStacks
     Condition: AutoCreateAgents
     Properties:
-      TemplateURL: !Sub https://${SubAgentS3Bucket}.s3.${AWS::Region}.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_supervisor_agent.yaml
+      TemplateURL: https://aws-hcls-ml.s3.us-east-1.amazonaws.com/public_assets_support_materials/hcls_agent_toolkit/packaged_supervisor_agent.yaml
       Parameters:
         EnvironmentName: !Ref EnvironmentName
         S3Bucket: !Ref S3Bucket
