@@ -145,6 +145,11 @@ Resources:
               except Exception as e:
                   print(f"Error deleting aliases: {str(e)}")
                   raise
+
+          def wait_for_agent_status(agent_id, status):
+              while client.get_agent(agent_id)["agent"]["agentStatus"] != status:
+                time.sleep(2)
+
           def handler(event, context):
               try:
                   if event['RequestType'] in ['Create', 'Update']:
@@ -164,6 +169,7 @@ Resources:
                           clientToken=str(uuid.uuid4())
                       )
                       physical_id = response['agent']['agentId']
+                      wait_for_agent_status(physical_id, "NOT_PREPARED")
                       agent_alias = client.create_agent_alias(
                           agentAliasName='Supervisor-alias',
                           agentId=physical_id,
