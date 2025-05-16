@@ -57,7 +57,7 @@ from rich.markdown import Markdown
 
 PYTHON_TIMEOUT = 180
 PYTHON_RUNTIME = "python3.12"
-DEFAULT_ALIAS = "TSTALIASID"
+DEFAULT_ALIAS = "Latest"
 DEFAULT_CI_ACTION_GROUP_NAME = "CodeInterpreterAction"
 UNDECIDABLE_CLASSIFICATION = "undecidable"
 # ROUTER_MODEL = "us.anthropic.claude-3-haiku-20240307-v1:0"
@@ -1474,7 +1474,7 @@ class AgentsForAmazonBedrock:
             self,
             input_text: str,
             agent_id: str,
-            agent_alias_id: str = "TSTALIASID",
+            agent_alias_id: str = "Latest",
             session_id: str = str(uuid.uuid1()),
             session_state: dict = {},
             enable_trace: bool = False,
@@ -1488,7 +1488,7 @@ class AgentsForAmazonBedrock:
         Args:
             input_text (str): The text to be processed by the agent.
             agent_id (str): The ID of the agent to invoke.
-            agent_alias_id (str, optional): The alias ID of the agent to invoke. Defaults to "TSTALIASID".
+            agent_alias_id (str, optional): The alias ID of the agent to invoke. Defaults to "Latest".
             session_id (str, optional): The ID of the session. Defaults to a new UUID.
             session_state (dict, optional): The state of the session. Defaults to an empty dict.
             enable_trace (bool, optional): Whether to enable trace. Defaults to False.
