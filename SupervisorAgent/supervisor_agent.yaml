@@ -143,8 +143,8 @@ Resources:
           def handler(event, context):
               try:
                   if event['RequestType'] in ['Create', 'Update']:
-                      
-                      response = client.create_agent(
+                      create_agent
+                      response = client.(
                           agentName='Supervisoragent',
                           agentResourceRoleArn=event['ResourceProperties']['RoleArn'],
                           description='Multi-agent collaboration for biomarker discovery',
@@ -160,6 +160,10 @@ Resources:
                           clientToken=str(uuid.uuid4())
                       )
                       physical_id = response['agent']['agentId']
+                      client.create_agent_alias(
+                          agentAliasName='Supervisor-alias',
+                          agentId=physical_id,
+                        )
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, 
                           {'AgentId': physical_id}, physical_id)
                   elif event['RequestType'] == 'Delete':
