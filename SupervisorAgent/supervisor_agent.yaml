@@ -147,7 +147,7 @@ Resources:
                   raise
 
           def wait_for_agent_status(agent_id, status):
-              while client.get_agent(agent_id)["agent"]["agentStatus"] != status:
+              while client.get_agent(agentId=agent_id)["agent"]["agentStatus"] != status:
                 time.sleep(2)
 
           def handler(event, context):
