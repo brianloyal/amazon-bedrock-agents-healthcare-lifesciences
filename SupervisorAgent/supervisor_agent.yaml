@@ -144,7 +144,7 @@ Resources:
               try:
                   if event['RequestType'] in ['Create', 'Update']:
                       create_agent
-                      response = client.(
+                      response = client.create_agent(
                           agentName='Supervisoragent',
                           agentResourceRoleArn=event['ResourceProperties']['RoleArn'],
                           description='Multi-agent collaboration for biomarker discovery',
@@ -160,7 +160,7 @@ Resources:
                           clientToken=str(uuid.uuid4())
                       )
                       physical_id = response['agent']['agentId']
-                      client.create_agent_alias(
+                      agent_alias = client.create_agent_alias(
                           agentAliasName='Supervisor-alias',
                           agentId=physical_id,
                         )
