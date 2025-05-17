@@ -1,5 +1,5 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Description: 'CloudFormation template for Bedrock Agent deployment using custom resource'
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation template for Bedrock Agent deployment using custom resource"
 
 Parameters:
   EnvironmentName:
@@ -18,10 +18,10 @@ Parameters:
 
 Resources:
   BedrockAgentRole:
-    Type: 'AWS::IAM::Role'
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -30,17 +30,17 @@ Resources:
       Policies:
         - PolicyName: BedrockAgentCustomPolicy
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Sid: AmazonBedrockAgentBedrockFoundationModelPolicy
                 Effect: Allow
-                Action: 
+                Action:
                   - bedrock:InvokeModel*
                   - bedrock:CreateInferenceProfile
                 Resource:
-                  - !Sub 'arn:aws:bedrock:${AWS::Region}::foundation-model/*'
-                  - !Sub 'arn:aws:bedrock:${AWS::Region}::inference-profile/*'
-                  - !Sub 'arn:aws:bedrock:${AWS::Region}::application-inference-profile/*'
+                  - !Sub "arn:aws:bedrock:${AWS::Region}::foundation-model/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}::inference-profile/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}::application-inference-profile/*"
               - Sid: SupervisorAgentPolicy
                 Effect: Allow
                 Action:
@@ -78,7 +78,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -87,28 +87,28 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
-      - PolicyName: BedrockAgentAccess
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action:
-              - bedrock:*
-            Resource:
-              - !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/*'
-              - !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent-alias/*'
-              - !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/*'
-              - !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:application-inference-profile/*'
-          - Effect: Allow
-            Action:
-              - bedrock:ListAgentAliases
-            Resource:
-              - !Sub 'arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:*'
-          - Effect: Allow
-            Action: iam:PassRole
-            Resource: 
-              - !GetAtt BedrockAgentRole.Arn
-              - !Ref AgentRole 
+        - PolicyName: BedrockAgentAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:*
+                Resource:
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent-alias/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:application-inference-profile/*"
+              - Effect: Allow
+                Action:
+                  - bedrock:ListAgentAliases
+                Resource:
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:*"
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource:
+                  - !GetAtt BedrockAgentRole.Arn
+                  - !Ref AgentRole
 
   BedrockAgentFunction:
     Type: AWS::Lambda::Function
@@ -145,14 +145,10 @@ Resources:
               except Exception as e:
                   print(f"Error deleting aliases: {str(e)}")
                   raise
-
-          def wait_for_agent_status(agent_id, status):
-              while client.get_agent(agentId=agent_id)["agent"]["agentStatus"] != status:
-                time.sleep(2)
-
           def handler(event, context):
               try:
                   if event['RequestType'] in ['Create', 'Update']:
+                      
                       response = client.create_agent(
                           agentName='Supervisoragent',
                           agentResourceRoleArn=event['ResourceProperties']['RoleArn'],
@@ -169,11 +165,6 @@ Resources:
                           clientToken=str(uuid.uuid4())
                       )
                       physical_id = response['agent']['agentId']
-                      # wait_for_agent_status(physical_id, "NOT_PREPARED")
-                      # agent_alias = client.create_agent_alias(
-                      #     agentAliasName='Supervisor-alias',
-                      #     agentId=physical_id,
-                      #   )
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, 
                           {'AgentId': physical_id}, physical_id)
                   elif event['RequestType'] == 'Delete':
@@ -325,7 +316,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CollaboratorAssociationFunction.Arn
       AgentId: !GetAtt BedrockAgentCustomResource.AgentId
-  
+
   AgentIdSSMParameter:
     DependsOn: CollaboratorAssociationCustomResource
     Type: AWS::SSM::Parameter
