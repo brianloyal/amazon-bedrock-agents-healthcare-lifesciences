@@ -169,11 +169,11 @@ Resources:
                           clientToken=str(uuid.uuid4())
                       )
                       physical_id = response['agent']['agentId']
-                      wait_for_agent_status(physical_id, "NOT_PREPARED")
-                      agent_alias = client.create_agent_alias(
-                          agentAliasName='Supervisor-alias',
-                          agentId=physical_id,
-                        )
+                      # wait_for_agent_status(physical_id, "NOT_PREPARED")
+                      # agent_alias = client.create_agent_alias(
+                      #     agentAliasName='Supervisor-alias',
+                      #     agentId=physical_id,
+                      #   )
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, 
                           {'AgentId': physical_id}, physical_id)
                   elif event['RequestType'] == 'Delete':
