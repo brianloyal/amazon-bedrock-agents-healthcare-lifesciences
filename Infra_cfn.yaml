@@ -47,10 +47,19 @@ Parameters:
     NoEcho: true
     Description: Provide USPTO API Key to utilize /search path
     Default: ""
+  DeployApplication:
+    Type: String
+    Description: Select true to deploy the application. Select false to only build the application.
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
 
 Conditions:
   CreateCompetitiveIntelAgent:
     !Not [!Or [!Equals [!Ref TavilyApiKey, ""], !Equals [!Ref USPTOApiKey, ""]]]
+  CreateReactApp: !Equals [!Ref DeployApplication, "true"]
+
 
 Resources:
   # VPC
@@ -240,6 +249,7 @@ Resources:
 
   TriggerReactAppBuildCustomResource:
     Type: Custom::TriggerAgentBuild
+    Condition: CreateReactApp
     Properties:
       ServiceToken: !GetAtt TriggerAgentBuildLambda.Arn
       ProjectName: !Ref ReactAppCodeBuild
@@ -483,6 +493,7 @@ Resources:
 
   ReactAppCodeBuild:
     Type: AWS::CodeBuild::Project
+    Condition: CreateReactApp
     Properties:
       Name: !Sub ${AWS::StackName}-ReactAppCodeBuild
       Description: "CodeBuild project to build and React App CloudFormation templates"
@@ -528,6 +539,7 @@ Resources:
 
   ReactAppDockerBuildNestedStack:
     Type: AWS::CloudFormation::Stack
+    Condition: CreateReactApp
     DependsOn:
       - ReactAppCodeBuild
       - TriggerReactAppBuildCustomResource
@@ -541,6 +553,7 @@ Resources:
 
   ReactAppEcsBuildNestedStack:
     Type: AWS::CloudFormation::Stack
+    Condition: CreateReactApp
     DependsOn:
       - ReactAppDockerBuildNestedStack
     Properties:
@@ -581,6 +594,7 @@ Outputs:
     Description: Redshift Cluster Endpoint
     Value: !GetAtt AgentBuildNestedStack.Outputs.RedshiftClusterEndpoint
   ReactAppExternalURL:
+    Condition: CreateReactApp
     Value:
       Fn::GetAtt:
         - ReactAppEcsBuildNestedStack
