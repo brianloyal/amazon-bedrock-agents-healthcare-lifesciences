@@ -493,7 +493,6 @@ Resources:
 
   ReactAppCodeBuild:
     Type: AWS::CodeBuild::Project
-    Condition: CreateReactApp
     Properties:
       Name: !Sub ${AWS::StackName}-ReactAppCodeBuild
       Description: "CodeBuild project to build and React App CloudFormation templates"
